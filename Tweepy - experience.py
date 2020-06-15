@@ -103,6 +103,7 @@ def destroy_tweet():
         twitter.destroy_status(tweet.id)
 def clearInterval(wrapper):
     wrapper.timer.cancel()
+#comit
 
 #Executando 
 #tweetar()
