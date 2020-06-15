@@ -15,12 +15,14 @@ autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
 autenticacao.set_access_token(token_acesso,token_acesso_segredo)
 twitter =  tweepy.API(autenticacao)
 user_teste = twitter.user_timeline('generico')
+busca = twitter.search(q="valorant")
 lista_tweets = []
 aux = 0 
 conteudo = []
 interval = 5.0
 
-
+for tweet in busca:
+    print(busca.text)
 
 
 def banco_bot () :
@@ -113,4 +115,4 @@ def clearInterval(wrapper):
 #reply()
 #destroy_tweet()
 #match_followers()
-banco_bot()
+#banco_bot()
