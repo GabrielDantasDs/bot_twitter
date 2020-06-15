@@ -15,14 +15,20 @@ autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
 autenticacao.set_access_token(token_acesso,token_acesso_segredo)
 twitter =  tweepy.API(autenticacao)
 user_teste = twitter.user_timeline('generico')
-busca = twitter.search(q="valorant")
+
 lista_tweets = []
 aux = 0 
 conteudo = []
 interval = 5.0
+tweet_repo = []
 
-for tweet in busca:
-    print(busca.text)
+def busca_func() :
+    termo_busca = input ("De o termo de busca:")
+    busca = twitter.search(q= termo_busca, result_type = "recent")
+    for tweet in busca:
+        tweet_repo.append(tweet.id)
+        twitter.update_status(f'Ola @{tweet.user.screen_name}, vi que me chamou em que posso ajudar ?',tweet.id)
+        print(f'User:{tweet.user.screen_name} text: {tweet.text}')
 
 
 def banco_bot () :
@@ -116,3 +122,4 @@ def clearInterval(wrapper):
 #destroy_tweet()
 #match_followers()
 #banco_bot()
+busca_func()
