@@ -7,10 +7,10 @@ from pymongo import MongoClient
 import datetime
 
 #Declarações 
-chave_consumidor = 'iYp4Z39sT0FgYILG7KCPVsRwd'
-segredo_consumidor = 'jlyavSiYi7avSMO2OZqlbyhsJDhhBHFoCgdaCvwCKmFKlfyqry'
-token_acesso = '1266133176059080705-vIw80k2r61FsGmubL8vxRV02hgvB44'
-token_acesso_segredo = '9amCbSPFl8onmN0aYfxKY3L0xly3QTxXWbMTq1mYlh9Ls' 
+chave_consumidor = 'XXXXXXXXXXXXXXXXXXX'
+segredo_consumidor = 'XXXXXXXXXXXXXXXXX'
+token_acesso = 'XXXXXXXXXXXXXXX'
+token_acesso_segredo = 'XXXXXXXXXXXXXXXX'
 autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
 autenticacao.set_access_token(token_acesso,token_acesso_segredo)
 twitter =  tweepy.API(autenticacao)
