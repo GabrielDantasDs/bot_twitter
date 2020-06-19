@@ -5,12 +5,13 @@ import json
 import pymongo
 from pymongo import MongoClient
 import datetime
+from geo_track import geo_tracker
 
 #Declarações 
-chave_consumidor = 'XXXXXXXXXXXXXXXXXXX'
-segredo_consumidor = 'XXXXXXXXXXXXXXXXX'
-token_acesso = 'XXXXXXXXXXXXXXX'
-token_acesso_segredo = 'XXXXXXXXXXXXXXXX'
+chave_consumidor = 'iYp4Z39sT0FgYILG7KCPVsRwd'
+segredo_consumidor = 'jlyavSiYi7avSMO2OZqlbyhsJDhhBHFoCgdaCvwCKmFKlfyqry'
+token_acesso = '1266133176059080705-vIw80k2r61FsGmubL8vxRV02hgvB44'
+token_acesso_segredo = '9amCbSPFl8onmN0aYfxKY3L0xly3QTxXWbMTq1mYlh9Ls' 
 autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
 autenticacao.set_access_token(token_acesso,token_acesso_segredo)
 twitter =  tweepy.API(autenticacao)
@@ -22,14 +23,25 @@ conteudo = []
 interval = 5.0
 tweet_repo = []
 
-def busca_func() :
+
+geo = geo_tracker()
+
+coordinate_y = geo.location.longitude
+coordinate_x = geo.location.latitude
+radius  = 10000
+coordinates = str([coordinate_x, coordinate_y,radius])
+
+print (coordinates)
+
+def bot_func() :
     termo_busca = input ("De o termo de busca:")
-    busca = twitter.search(q= termo_busca, result_type = "recent")
+    busca = twitter.search(q= termo_busca, result_type = "recent",geocode = "-14.235004,-51.92528,1000km")
+    print(len(busca))
     for tweet in busca:
         tweet_repo.append(tweet.id)
-        twitter.update_status(f'Ola @{tweet.user.screen_name}, vi que me chamou em que posso ajudar ?',tweet.id)
+        #retweet(tweet.id)
+        #twitter.update_status(f'Ola @{tweet.user.screen_name}, vi que me chamou em que posso ajudar ?',tweet.id)
         print(f'User:{tweet.user.screen_name} text: {tweet.text}')
-
 
 def banco_bot () :
     cliente = MongoClient('localhost',27017)
@@ -83,9 +95,9 @@ def tweetar ():
         lista_tweets.append(tweet)
     print(len (lista_tweets))
     return 0    
-def retweet ():
+def retweet (tweet_id):
     try:
-     twitter.retweet()
+     twitter.retweet(tweet_id)
      print("rt com sucesso")
     except:
         print("erro ")
@@ -99,10 +111,9 @@ def setInterval (function,interval):
         wrapper.timer.start()
 
     def wrapper():
-        spam()
-        setTime(wrapper)
-        if(aux == len(lista_tweets)):
-            clearInterval(wrapper)
+        bot_func()
+        setTime(wrapper)      
+            
 
     setTime(wrapper)
     return wrapper
@@ -115,11 +126,11 @@ def clearInterval(wrapper):
 
 #Executando 
 #tweetar()
-#setInterval(spam,interval)
+#setInterval(bot_func,interval)
 #retweet()
 #append_text()
 #reply()
 #destroy_tweet()
 #match_followers()
 #banco_bot()
-busca_func()
+bot_func()
