@@ -4,7 +4,7 @@ import keyboard
 import json 
 import pymongo
 from pymongo import MongoClient
-import datetime
+from datetime import datetime 
 from geo_track import geo_tracker
 
 #Declarações 
@@ -16,13 +16,13 @@ autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
 autenticacao.set_access_token(token_acesso,token_acesso_segredo)
 twitter =  tweepy.API(autenticacao)
 user_teste = twitter.user_timeline('generico')
-
 lista_tweets = []
 aux = 0 
 conteudo = []
 interval = 5.0
 tweet_repo = []
-
+time = datetime.now()
+print (type (time))
 
 geo = geo_tracker()
 
@@ -34,8 +34,8 @@ coordinates = str([coordinate_x, coordinate_y,radius])
 print (coordinates)
 
 def bot_func() :
-    termo_busca = input ("De o termo de busca:")
-    busca = twitter.search(q= termo_busca, result_type = "recent",geocode = "-14.235004,-51.92528,1000km")
+    termo_busca = "live"
+    busca = twitter.search(q= termo_busca, result_type = "recent",lang = "pt", until = "2020-06-21" )
     print(len(busca))
     for tweet in busca:
         tweet_repo.append(tweet.id)
@@ -48,6 +48,9 @@ def banco_bot () :
     banco = cliente.bot
     logs_pesquisa = banco.logs_pesquisa
     logs_id = logs_pesquisa.insert_one(match_followers()) 
+
+
+
 def reply():
     for tweet in user_teste:
                 twitter.update_status("Oi linda, expressando meu afeto fazendo oq eu sei fazer de melhor(ou mais ou menos) <3 , @inoimisets", tweet.id)
@@ -123,14 +126,13 @@ def destroy_tweet():
 def clearInterval(wrapper):
     wrapper.timer.cancel()
 #comit
-
 #Executando 
 #tweetar()
-#setInterval(bot_func,interval)
+setInterval(bot_func,interval)
 #retweet()
 #append_text()
 #reply()
 #destroy_tweet()
 #match_followers()
 #banco_bot()
-bot_func()
+#bot_func()
