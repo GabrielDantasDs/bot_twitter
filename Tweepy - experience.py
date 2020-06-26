@@ -8,46 +8,54 @@ from datetime import datetime
 from geo_track import geo_tracker
 
 #Declarações 
-chave_consumidor = 'iYp4Z39sT0FgYILG7KCPVsRwd'
-segredo_consumidor = 'jlyavSiYi7avSMO2OZqlbyhsJDhhBHFoCgdaCvwCKmFKlfyqry'
-token_acesso = '1266133176059080705-vIw80k2r61FsGmubL8vxRV02hgvB44'
-token_acesso_segredo = '9amCbSPFl8onmN0aYfxKY3L0xly3QTxXWbMTq1mYlh9Ls' 
-autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
-autenticacao.set_access_token(token_acesso,token_acesso_segredo)
-twitter =  tweepy.API(autenticacao)
-user_teste = twitter.user_timeline('generico')
+
 lista_tweets = []
 aux = 0 
 conteudo = []
-interval = 5.0
-tweet_repo = []
-time = datetime.now()
-print (type (time))
+interval = 10
 
-geo = geo_tracker()
 
-coordinate_y = geo.location.longitude
-coordinate_x = geo.location.latitude
-radius  = 10000
-coordinates = str([coordinate_x, coordinate_y,radius])
+def credentials_json ():
+   with open ('credentials.json', 'r') as json_file :
+        leitura = json.load(json_file)
+        chave_consumidor = str (leitura['chave_consumidor'])
+        segredo_consumidor = str (leitura['segredo_consumidor'])
+        token_acesso = str (leitura['token_acesso'])
+        token_acesso_segredo = str (leitura['token_acesso_segredo'])
+        autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
+        autenticacao.set_access_token(token_acesso,token_acesso_segredo)
+        global twitter 
+        twitter = tweepy.API(autenticacao)
+        print(chave_consumidor)
+   json_file.close()
+   return twitter
+  
+user_teste = credentials_json().get_user('generico')
+   
+ 
 
-print (coordinates)
 
 def bot_func() :
-    termo_busca = "live"
-    busca = twitter.search(q= termo_busca, result_type = "recent",lang = "pt", until = "2020-06-21" )
+    termo_busca = "live on"
+    busca = twitter.search(q= termo_busca, result_type = "recent",lang = "pt", since_id = 1275474087545053187 )
     print(len(busca))
+    
     for tweet in busca:
-        tweet_repo.append(tweet.id)
-        #retweet(tweet.id)
+        tweet_repo = {"Usuario": tweet.user.screen_name,
+                "tweet": tweet.text,
+                "tweet_id":tweet.id,
+                "retweet": retweet(tweet.id)}
+        
+        
         #twitter.update_status(f'Ola @{tweet.user.screen_name}, vi que me chamou em que posso ajudar ?',tweet.id)
         print(f'User:{tweet.user.screen_name} text: {tweet.text}')
+    return tweet_repo
 
 def banco_bot () :
     cliente = MongoClient('localhost',27017)
     banco = cliente.bot
     logs_pesquisa = banco.logs_pesquisa
-    logs_id = logs_pesquisa.insert_one(match_followers()) 
+    logs_pesquisa.insert_one(bot_func()) 
 
 
 
@@ -101,9 +109,12 @@ def tweetar ():
 def retweet (tweet_id):
     try:
      twitter.retweet(tweet_id)
+     retweet = True
      print("rt com sucesso")
     except:
         print("erro ")
+        retweet = False
+    return retweet 
 def spam ():
          global aux
          twitter.update_status(lista_tweets[aux])
@@ -114,7 +125,8 @@ def setInterval (function,interval):
         wrapper.timer.start()
 
     def wrapper():
-        bot_func()
+        #bot_func()
+        banco_bot()
         setTime(wrapper)      
             
 
@@ -125,10 +137,15 @@ def destroy_tweet():
         twitter.destroy_status(tweet.id)
 def clearInterval(wrapper):
     wrapper.timer.cancel()
+
+
+
+    
 #comit
+#credentials_json()
 #Executando 
 #tweetar()
-setInterval(bot_func,interval)
+#setInterval(bot_func,interval)
 #retweet()
 #append_text()
 #reply()
