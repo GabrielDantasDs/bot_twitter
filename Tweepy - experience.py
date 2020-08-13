@@ -3,16 +3,33 @@ from threading import Timer
 import keyboard
 import json 
 import pymongo
+import numpy
 from pymongo import MongoClient
 from datetime import datetime 
 from geo_track import geo_tracker
 
 #Declarações 
-
+ 
 lista_tweets = []
 aux = 0 
 conteudo = []
 interval = 10
+
+
+def friendship (credentials):
+    followers = credentials.followers_ids('bot_liveon')
+    for follower in followers:
+        try:
+            credentials.create_friendship(follower)
+        except:
+            print ("error")
+    
+
+
+
+
+
+
 
 
 def credentials_json ():
@@ -29,10 +46,11 @@ def credentials_json ():
         print(chave_consumidor)
    json_file.close()
    return twitter
-  
-user_teste = credentials_json().get_user('generico')
-   
+
+
  
+  
+
 
 
 def bot_func() :
@@ -61,7 +79,7 @@ def banco_bot () :
 
 def reply():
     for tweet in user_teste:
-                twitter.update_status("Oi linda, expressando meu afeto fazendo oq eu sei fazer de melhor(ou mais ou menos) <3 , @inoimisets", tweet.id)
+                twitter.update_status(".", tweet.id)
 def match_followers ():
     name = input ("De o @ do primeiro usuario:")
     name_other = input ("De o @ do segundo usuario:")
@@ -138,11 +156,45 @@ def destroy_tweet():
 def clearInterval(wrapper):
     wrapper.timer.cancel()
 
+def filter (word, repetitions, list_filter):
+    if(len (str(word)) > 3 and (str(word)).find('@') == -1 and repetitions > 1 and word not in list_filter):
+        list_filter.append(word)
+
+    
+def backtofront(list) :
+    reverse = list.reverse()
+    for word in list:
+        update =+ word 
+
+
+
 
 
     
+    
+    
+
+
+def grab_words():
+    list_filter = []
+    lista_words = [100]
+    time_line = twitter.user_timeline('@GabrielDantt')
+    for tweet in time_line:
+        split = tweet.text.split(' ')
+        for word in split:
+            lista_words.append(word)
+    for word in lista_words:
+      filter(word,lista_words.count(word),list_filter)
+    list_filter = sorted(set(list_filter))
+    print(list_filter)
+            
+    
+    
+
+    
 #comit
-#credentials_json()
+credentials_json()
+#friendship(twitter)
 #Executando 
 #tweetar()
 #setInterval(bot_func,interval)
@@ -153,3 +205,4 @@ def clearInterval(wrapper):
 #match_followers()
 #banco_bot()
 #bot_func()
+grab_words()
