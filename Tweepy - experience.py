@@ -19,6 +19,7 @@ twitter = login.login.credentials_json()
 tweet = tweets()
 tweet.catch_tweet(twitter)
 tweet_text = list(tweet.tweet_text)
+new_id = 0
 
 def friendship (credentials):
     followers = credentials.followers_ids('bot_liveon')
@@ -176,6 +177,7 @@ def catch_tweet():
 
 
 def backtofront_reply(lista, tweet_id) :
+    global new_id
     update = '@MInfraestrutura'
     reverse = lista
     reverse.reverse()
@@ -183,10 +185,10 @@ def backtofront_reply(lista, tweet_id) :
     for word in reverse:
         update = update + ' ' + word
     try:
-        
-        twitter.update_status(update,tweet_id)
-        return 1
-     
+        if(new_id != tweet_id):
+            twitter.update_status(update,tweet_id)
+            new_id = tweet_id
+            return 1
     except:
         return 0
    
