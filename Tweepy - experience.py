@@ -7,14 +7,18 @@ import numpy
 from pymongo import MongoClient
 from datetime import datetime 
 from geo_track import geo_tracker
-
+import login
+from Tweets import tweets
 #Declarações 
  
 lista_tweets = []
 aux = 0 
 conteudo = []
 interval = 10
-
+twitter = login.login.credentials_json()
+tweet = tweets()
+tweet.catch_tweet(twitter)
+tweet_text = list(tweet.tweet_text)
 
 def friendship (credentials):
     followers = credentials.followers_ids('bot_liveon')
@@ -32,20 +36,7 @@ def friendship (credentials):
 
 
 
-def credentials_json ():
-   with open ('credentials.json', 'r') as json_file :
-        leitura = json.load(json_file)
-        chave_consumidor = str (leitura['chave_consumidor'])
-        segredo_consumidor = str (leitura['segredo_consumidor'])
-        token_acesso = str (leitura['token_acesso'])
-        token_acesso_segredo = str (leitura['token_acesso_segredo'])
-        autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
-        autenticacao.set_access_token(token_acesso,token_acesso_segredo)
-        global twitter 
-        twitter = tweepy.API(autenticacao)
-        print(chave_consumidor)
-   json_file.close()
-   return twitter
+
 
 
  
@@ -77,9 +68,9 @@ def banco_bot () :
 
 
 
-def reply():
-    for tweet in user_teste:
-                twitter.update_status(".", tweet.id)
+def reply(tweet,id_tweet):
+    twitter.update_status(str(tweet),id_tweet)
+    
 def match_followers ():
     name = input ("De o @ do primeiro usuario:")
     name_other = input ("De o @ do segundo usuario:")
@@ -137,19 +128,26 @@ def spam ():
          global aux
          twitter.update_status(lista_tweets[aux])
          aux = aux + 1
+
+
 def setInterval (function,interval):
+
     def setTime(wrapper):
         wrapper.timer = Timer(interval,wrapper)
         wrapper.timer.start()
 
     def wrapper():
-        #bot_func()
-        banco_bot()
+        tweet.catch_tweet(twitter)
+        tweet_text = list(tweet.tweet_text)
+        backtofront_reply(tweet_text, tweet.tweet_id)
         setTime(wrapper)      
             
 
     setTime(wrapper)
     return wrapper
+
+
+
 def destroy_tweet():
     for tweet in user_teste:
         twitter.destroy_status(tweet.id)
@@ -160,12 +158,38 @@ def filter (word, repetitions, list_filter):
     if(len (str(word)) > 3 and (str(word)).find('@') == -1 and repetitions > 1 and word not in list_filter):
         list_filter.append(word)
 
-    
-def backtofront(list) :
-    reverse = list.reverse()
-    for word in list:
-        update =+ word 
 
+def catch_tweet():
+    tweets_tl = twitter.user_timeline('@tteixeira47')
+    tweet = []
+    n = 0
+ #Pula replys mas não pula retweets ainda 
+    while(tweets_tl[n].text.find('@') == 0):
+        if not tweets_tl[n].retweeted :
+            n +=1
+            print('n é,',n)
+            print(tweets_tl[n].text) 
+    tweet = tweets_tl[n].text.split(' ')
+    print(tweet)       
+    return tweet 
+
+
+
+def backtofront_reply(lista, tweet_id) :
+    update = '@MInfraestrutura'
+    reverse = lista
+    reverse.reverse()
+    #print(reverse)
+    for word in reverse:
+        update = update + ' ' + word
+    try:
+        
+        twitter.update_status(update,tweet_id)
+        return 1
+     
+    except:
+        return 0
+   
 
 
 
@@ -176,9 +200,10 @@ def backtofront(list) :
 
 
 def grab_words():
+
     list_filter = []
     lista_words = [100]
-    time_line = twitter.user_timeline('@GabrielDantt')
+    time_line = twitter.user_timeline('@MInfraestrutura')
     for tweet in time_line:
         split = tweet.text.split(' ')
         for word in split:
@@ -189,15 +214,14 @@ def grab_words():
     print(list_filter)
             
     
-    
 
     
-#comit
-credentials_json()
+
+#backtofront_reply(tweet_text, tweet.tweet_id)
 #friendship(twitter)
 #Executando 
 #tweetar()
-#setInterval(bot_func,interval)
+setInterval(backtofront_reply(tweet_text, tweet.tweet_id),interval)
 #retweet()
 #append_text()
 #reply()
@@ -205,4 +229,7 @@ credentials_json()
 #match_followers()
 #banco_bot()
 #bot_func()
-grab_words()
+#grab_words()
+#reply (backtofront(catch_tweet()),'1295344810073751553')
+#catch_tweet()
+
