@@ -9,8 +9,9 @@ from datetime import datetime
 from geo_track import geo_tracker
 import login
 from Tweets import tweets
+import os
 #Declarações 
- 
+os.environ['SECRET_KEY']
 lista_tweets = []
 aux = 0 
 conteudo = []
@@ -223,7 +224,7 @@ def grab_words():
 #friendship(twitter)
 #Executando 
 #tweetar()
-setInterval(backtofront_reply(tweet_text, tweet.tweet_id),interval)
+#setInterval(backtofront_reply(tweet_text, tweet.tweet_id),interval)
 #retweet()
 #append_text()
 #reply()
