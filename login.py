@@ -1,20 +1,22 @@
 import tweepy
 import json
 import os
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ.get("SECRET_KEY")
+KEY_COSTUMER = os.environ.get("KEY_COSTUMER")
+ACESS_TOKEN = os.environ.get('ACESS_TOKEN')
+SECRET_TOKEN_ACESS = os.environ.get('SECRET_TOKEN_ACESS')
 
 
 class login:
 
-        def credentials_json ():
-            with open ('credentials_second.json', 'r') as json_file :
-                    leitura = json.load(json_file)
-                    chave_consumidor = SECRET_KEY
-                    segredo_consumidor = str (leitura['segredo_consumidor'])
-                    token_acesso = str (leitura['token_acesso'])
-                    token_acesso_segredo = str (leitura['token_acesso_segredo'])
-                    autenticacao = tweepy.OAuthHandler(chave_consumidor, segredo_consumidor)
-                    autenticacao.set_access_token(token_acesso,token_acesso_segredo)
-                    twitter = tweepy.API(autenticacao)
-            json_file.close()
-            return twitter
+    def credentials_json():
+        leitura = json.load(json_file)
+        chave_consumidor = SECRET_KEY
+        segredo_consumidor = KEY_COSTUMER
+        token_acesso = ACESS_TOKEN
+        token_acesso_segredo = SECRET_TOKEN_ACESS
+        autenticacao = tweepy.OAuthHandler(
+            chave_consumidor, segredo_consumidor)
+        autenticacao.set_access_token(token_acesso, token_acesso_segredo)
+        twitter = tweepy.API(autenticacao)
+        return twitter
