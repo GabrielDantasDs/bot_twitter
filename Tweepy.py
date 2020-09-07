@@ -11,7 +11,6 @@ import login
 from Tweets import tweets
 import os
 #Declarações 
-os.environ['SECRET_KEY']
 lista_tweets = []
 aux = 0 
 conteudo = []
