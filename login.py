@@ -1,11 +1,11 @@
 import tweepy
 import json
 import os
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get('SECRET_KEY')
 KEY_COSTUMER = os.environ.get("KEY_COSTUMER")
 ACESS_TOKEN = os.environ.get('ACESS_TOKEN')
 SECRET_TOKEN_ACESS = os.environ.get('SECRET_TOKEN_ACESS')
-print(os.environ.get("SECRET_KEY"))
+
 
 
 class login:
