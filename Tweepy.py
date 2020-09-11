@@ -205,7 +205,7 @@ def grab_words():
 
     list_filter = []
     lista_words = [100]
-    time_line = twitter.user_timeline('@MInfraestrutura')
+    time_line = twitter.user_timeline('@tteixeira47')
     for tweet in time_line:
         split = tweet.text.split(' ')
         for word in split:
