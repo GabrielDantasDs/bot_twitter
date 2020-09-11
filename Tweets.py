@@ -7,7 +7,7 @@ class tweets:
         self.tweet_id = -1
         
     def catch_tweet (self,twitter):
-        tweets_tl = twitter.user_timeline('@MInfraestrutura')
+        tweets_tl = twitter.user_timeline('tteixeira47')
         tweet = []
         n = 0
     #Pula replys mas não pula retweets ainda 
