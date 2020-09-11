@@ -15,7 +15,7 @@ lista_tweets = []
 aux = 0 
 conteudo = []
 interval = 10
-twitter = login.login.credentials_json()
+twitter = login.login.credentials()
 tweet = tweets()
 tweet.catch_tweet(twitter)
 tweet_text = list(tweet.tweet_text)
