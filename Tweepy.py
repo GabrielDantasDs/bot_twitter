@@ -178,7 +178,7 @@ def catch_tweet():
 
 def backtofront_reply(lista, tweet_id) :
     global new_id
-    update = '@MInfraestrutura'
+    update = '@tteixeira47'
     reverse = lista
     reverse.reverse()
     #print(reverse)
