@@ -9,8 +9,7 @@ SECRET_TOKEN_ACESS = os.environ.get('SECRET_TOKEN_ACESS')
 
 class login:
 
-    def credentials_json():
-        leitura = json.load(json_file)
+    def credentials():
         chave_consumidor = SECRET_KEY
         segredo_consumidor = KEY_COSTUMER
         token_acesso = ACESS_TOKEN
