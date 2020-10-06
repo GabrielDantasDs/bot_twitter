@@ -223,7 +223,7 @@ def grab_words():
 #friendship(twitter)
 #Executando 
 #tweetar()
-#setInterval(backtofront_reply(tweet_text, tweet.tweet_id),interval)
+setInterval(backtofront_reply(tweet_text, tweet.tweet_id),interval)
 #retweet()
 #append_text()
 #reply()
