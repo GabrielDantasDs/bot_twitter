@@ -27,4 +27,4 @@ class login:
         twitter = tweepy.API(autenticacao)
         return twitter
 
-    credentials()
+    
