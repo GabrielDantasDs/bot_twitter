@@ -3,7 +3,7 @@ import login
 
 class tweets:
     def __init__(self):
-        self.tweet_text = 'alo'
+        self.tweet_text = ''
         self.tweet_id = -1
         
     def catch_tweet (self,twitter):
